@@ -1,0 +1,115 @@
+import random
+import time
+
+print("Генерация 1 000 000 товаров")
+products = []
+for i in range(1000000):
+    product = {"id": random.randint(1, 10000000), "name": "Товар_" + str(i)}
+    products.append(product)
+
+print(f"Готово. Пример: {products[:2]}\n")
+
+small_list = products[:10000]
+
+
+def bubble_sort(lst):
+    n = len(lst)
+    for i in range(n):
+        for j in range(n - 1 - i):
+            tovar1 = lst[j]
+            tovar2 = lst[j + 1]
+            if tovar1["id"] > tovar2["id"]:
+                lst[j] = tovar2
+                lst[j + 1] = tovar1
+
+
+
+def insertion_sort(lst):
+    for i in range(1, len(lst)):
+        current_tovar = lst[i]
+        j = i - 1
+        while j >= 0 and current_tovar["id"] < lst[j]["id"]:
+            lst[j + 1] = lst[j]
+            j -= 1
+        lst[j + 1] = current_tovar
+
+
+def quick_sort(lst):
+    if len(lst) <= 1:
+        return lst
+    pivot = lst[len(lst) // 2]["id"]
+    left = []
+    middle = []
+    right = []
+    for tovar in lst:
+        if tovar["id"] < pivot:
+            left.append(tovar)
+        elif tovar["id"] > pivot:
+            right.append(tovar)
+        else:
+            middle.append(tovar)
+    return quick_sort(left) + middle + quick_sort(right)
+
+
+# --- НЕОТСОРТИРОВАННЫЙ СПИСОК ---
+print("=" * 60)
+print("НЕОТСОРТИРОВАННЫЙ СПИСОК (первые 20):")
+print("=" * 60)
+for t in small_list[:20]:
+    print(f"  ID: {t['id']:<10} Name: {t['name']}")
+
+print("\n" + "=" * 60)
+print("НЕОТСОРТИРОВАННЫЙ СПИСОК (последние 20):")
+print("=" * 60)
+for t in small_list[-20:]:
+    print(f"  ID: {t['id']:<10} Name: {t['name']}")
+
+# --- ЗАМЕРЫ ВРЕМЕНИ ---
+start = time.perf_counter()
+bubble_sort(small_list.copy())
+time_bubble = time.perf_counter() - start
+
+start = time.perf_counter()
+insertion_sort(small_list.copy())
+time_insertion = time.perf_counter() - start
+
+start = time.perf_counter()
+quick_sort(products)
+time_quick = time.perf_counter() - start
+
+
+bubble_sorted = small_list.copy()
+bubble_sort(bubble_sorted)
+
+# --- ОТСОРТИРОВАННЫЙ СПИСОК ---
+print("\n" + "=" * 60)
+print("ОТСОРТИРОВАННЫЙ СПИСОК (первые 20):")
+print("=" * 60)
+for t in bubble_sorted[:20]:
+    print(f"  ID: {t['id']:<10} Name: {t['name']}")
+
+print("\n" + "=" * 60)
+print("ОТСОРТИРОВАННЫЙ СПИСОК (последние 20):")
+print("=" * 60)
+for t in bubble_sorted[-20:]:
+    print(f"  ID: {t['id']:<10} Name: {t['name']}")
+
+# --- ПРОВЕРКА ---
+ok = True
+for i in range(len(bubble_sorted) - 1):
+    if bubble_sorted[i]["id"] > bubble_sorted[i + 1]["id"]:
+        ok = False
+        break
+
+
+# --- ВРЕМЯ ---
+print("\n" + "=" * 50)
+print(f"Пузырьковая (10 000 шт): {time_bubble:.2f} сек")
+print(f"Вставками    (10 000 шт): {time_insertion:.2f} сек")
+print(f"Быстрая      (1 000 000 шт): {time_quick:.2f} сек")
+print("=" * 50)
+
+print("\nВЫВОДЫ:")
+print("1. Простые сортировки очень медленные. На 1 млн товаров они будут работать часами.")
+print("2. Быстрая сортировка справляется с миллионом за секунды.")
+print("3. Для маркетплейса нужно использовать быстрые алгоритмы (или встроенный sorted()).")
