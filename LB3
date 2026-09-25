@@ -1,0 +1,123 @@
+#Лабораторная работа номер 3
+
+#Задача А
+
+#----------------------------------------------------------------------------
+def A():
+    mas_A = ['a','b','c','d','e','f','f','f','f','f','f',"21"]
+    pod_mas_A = ['b','d','f',"21"]
+    slovar_mas_A = {}
+    slovar_pod_mas_A = {}
+    count_mas = len(pod_mas_A)
+    count  = 0
+
+    for i in mas_A:
+        slovar_mas_A[i] = mas_A.count(i)
+    for i in pod_mas_A:
+        slovar_pod_mas_A[i] = pod_mas_A.count(i)
+
+    for i in slovar_pod_mas_A:
+        try:
+            if slovar_mas_A[i] >= 1:
+                count += 1
+            
+        except KeyError:
+            print("множество не является подмножеством")
+
+    if count == count_mas:
+        print("Множество является подмножеством")
+
+#-------------------------------------------------------------------------
+
+
+def B():
+    text = "123"
+    mas_B = []
+    hex_table = {}
+    for i in text:
+        mas_B.append(i)
+    for i in mas_B:
+        hex_table[i] = mas_B.count(i)
+    if len(text) == 0:
+        print("Список пуст")
+    else:
+        for i in  hex_table:
+            if hex_table[i] == 1:
+                print(i)
+                break
+            else:
+                print("в списке все символы повторяющиеся")
+#---------------------------------------------------------------
+
+#C
+
+def C(s):
+    s_mas = {}
+    for i in s:
+        s_mas[i] = s.count(i)
+    print(s_mas)
+    nechet = []
+    chet = []
+    for i in s_mas:
+        if s_mas[i] % 2 == 1:
+            nechet.append(i)
+        else:
+            chet.append(i)
+    if len(nechet) != 0:
+        maximum_nechet = nechet[0]
+        for i in nechet:
+            
+            if s_mas[i] > s_mas[maximum_nechet]:
+                maximum_nechet = i
+        palindrom = ""
+        for i in chet:
+            symbol = s_mas[i] // 2
+            palindrom += i * symbol
+        palindrom += maximum_nechet * s_mas[maximum_nechet]
+        for i in reversed(chet):
+            symbol = s_mas[i] // 2
+            palindrom += i * symbol
+        print("Палиндром:",palindrom)
+        print("Максимальное значение:",len(palindrom))
+    else:
+        palindrom = ""
+        for i in chet:
+            symbol = s_mas[i] // 2
+            palindrom += i * symbol
+
+        for i in reversed(chet):
+            symbol = s_mas[i] // 2
+            palindrom += i * symbol
+        print("Палиндром:",palindrom)
+        print("Максимальное значение:",len(palindrom))
+
+C("aAbBABba")
+C("abcdefghijklmnoPQrstuvwxyz")
+C("wasitacaroracatisaw")
+C("bbbabab")
+C("abcdeedcba")
+C("looooooongestpalindrOme")
+C("abcdeedcbaxyz")
+C("abbbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbabbab")
+
+#-----------------------------------------------------------------
+
+#D
+
+def D(s,t):
+    if s == t:
+        pass
+    else:
+        s_mas = {}
+        t_mas = {}
+        for i in s:
+            s_mas[i] = s.count(i)
+        for i in t:
+            t_mas[i] = t.count(i)
+        if s_mas == t_mas:
+            return True
+        else:
+            return False
+print(D("тоемони", "монитор"))
+        
+                
