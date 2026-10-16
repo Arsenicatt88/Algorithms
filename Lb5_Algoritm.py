@@ -20,80 +20,62 @@ graf = {
     "Проспект большевиков": {"Ладожская": 2},
     "Достоевская": {"Спасская": 2, "Владимирская": 1, "Лиговский проспект": 2}
 }
+import heapq
 
 
-def calculate_path_time(graph, path):
-    if not path or len(path) < 2:
-        return 0
-    total_time = 0
-    for i in range(len(path) - 1):
-        total_time += graph[path[i]][path[i + 1]]
-    return total_time
-
-
-def bfs(graph, start, end):
-    queue = [[start]]
-    visited = {start}
-    head = 0
-
-    while head < len(queue):
-        path = queue[head]
-        head += 1
-        node = path[-1]
-
-        if node == end:
-            total_time = calculate_path_time(graph, path)
-            return path, total_time
-
-        for neighbor in graph.get(node, {}):
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(path + [neighbor])
-
-    return None, 0
-
-
-def dfs(graph, start, end, visited=None, path=None):
-    if visited is None:
-        visited = set()
-    if path is None:
-        path = []
-
-    visited.add(start)
-    path.append(start)
+def dijkstra(graph, start, end):
 
     if start == end:
-        total_time = calculate_path_time(graph, path)
-        return path, total_time
-
-    for neighbor in graph.get(start, {}):
-        if neighbor not in visited:
-            result_path, result_time = dfs(graph, neighbor, end, visited, path)
-            if result_path:
-                return result_path, result_time
-
-    path.pop()
-    return None, 0
+        return [start], 0
 
 
-# Тест 1
-print("_____________________________________________")
-p, t = bfs(graf, "Василеостровская", "Достоевская")
-print(f"BFS: {p} | Время: {t} мин")
-p, t = dfs(graf, "Василеостровская", "Достоевская")
-print(f"DFS: {p} | Время: {t} мин")
-print("_____________________________________________")
+    dist = {start: 0}
 
-# Тест 2
-p, t = bfs(graf, "Новочеркасская", "Садовая")
-print(f"BFS: {p} | Время: {t} мин")
-p, t = dfs(graf, "Новочеркасская", "Садовая")
-print(f"DFS: {p} | Время: {t} мин")
-print("_____________________________________________")
+    prev = {start: None}
 
-# Тест 3
-p, t = bfs(graf, "Лиговский проспект", "Гостинный двор")
-print(f"BFS: {p} | Время: {t} мин")
-p, t = dfs(graf, "Лиговский проспект", "Гостинный двор")
-print(f"DFS: {p} | Время: {t} мин")
-print("_____________________________________________")
+
+    pq = [(0, start)]
+
+    while pq:
+        current_dist, node = heapq.heappop(pq)
+
+
+        if current_dist > dist.get(node, float("inf")):
+            continue
+
+
+        if node == end:
+            break
+
+        for neighbor, weight in graph.get(node, {}).items():
+            new_dist = current_dist + weight
+
+            if new_dist < dist.get(neighbor, float("inf")):
+                dist[neighbor] = new_dist
+                prev[neighbor] = node
+                heapq.heappush(pq, (new_dist, neighbor))
+
+    if end not in dist:
+        return None, 0
+
+    # Восстанавливаем путь
+    path = []
+    current = end
+
+    while current is not None:
+        path.append(current)
+        current = prev.get(current)
+
+    path.reverse()
+
+    return path, dist[end]
+
+print(dijkstra(graf,"Звенигородская","Достоевская"))
+print(dijkstra(graf,"Василеостровская","Проспект большевиков"))
+
+# Переход - 1
+# Желтая - 2
+# Красная - 3
+# Зелёная - 4
+# Фиолетовая - 5
+# Синяя - 6
